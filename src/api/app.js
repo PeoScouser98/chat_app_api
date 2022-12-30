@@ -19,6 +19,13 @@ app.use(
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
 app.use("/api", __User);
+
+app.get("/", (req, res) => {
+	return res.status(200).json({
+		status: 200,
+		message: "Server now is running!",
+	});
+});
 app.get("/account/activate/:token", activateAccount, (req, res) => {
 	res.sendFile(path.resolve(__dirname, "activate.html"));
 });
