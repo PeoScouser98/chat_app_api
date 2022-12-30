@@ -3,7 +3,7 @@ import app from "./api/app";
 import connectSocketIO from "./app/socketIO";
 import "dotenv/config";
 import mongoose from "mongoose";
-import connectMongoDb from "./config/connectMongoDB";
+import connectMongoDb from "./config/mongodb.config";
 import "babel-polyfill";
 
 const PORT = process.env.PORT || 3004;

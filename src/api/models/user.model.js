@@ -3,15 +3,15 @@ import { genSaltSync, hashSync, compareSync } from "bcrypt";
 
 const userSchema = mongoose.Schema(
 	{
-		account: {
+		email: {
 			type: String,
 			require: true,
-			minLength: 3,
+			// minLength: 16,
 		},
 		password: {
 			type: String,
 			require: true,
-			minLength: 3,
+			minLength: 6,
 		},
 		username: {
 			type: String,

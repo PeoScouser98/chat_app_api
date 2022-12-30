@@ -1,16 +1,23 @@
 import User from "../models/user.model";
-import Error from "http-errors";
+import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import transporter from "../../config/nodemailer.config";
 
 export const signup = async (req, res) => {
 	try {
 		const existAccount = await User.findOne({ account: req.body.account });
-		if (existAccount) throw Error.BadRequest("Account already exist!");
-
-		const newAccount = await new User(req.body).save();
-
-		return res.status(201).json(newAccount);
+		if (existAccount) throw createHttpError.BadRequest("Account already exist!");
+		const isProductionEnv = process.env.NODE_ENV.toLowerCase().localeCompare("production");
+		const verifyAccountUrl = isProductionEnv ? process.env.VERIFY_ACCOUNT_URL : process.env.LOCAL_VERIFY_ACCOUNT_URL;
+		const token = jwt.sign(req.body, process.env.SECRET_KEY, { expiresIn: "5m" });
+		const info = await transporter.sendMail({
+			from: process.env.AUTH_EMAIL,
+			to: req.body.email,
+			subject: "Thank you for creating new account ...",
+			html: `<p>Click on the link below <a href='${verifyAccountUrl}?token=${token}'>link</a> to activate your account </p>`,
+		});
+		return res.status(201).json(info);
 		// handle logic ...
 	} catch (error) {
 		console.log(error.message);
@@ -25,10 +32,10 @@ export const signin = async (req, res) => {
 	try {
 		const user = await User.findOne({ account: req.body.account }).exec();
 		if (!user) {
-			throw Error.NotFound("Account does not exist!");
+			throw createHttpError.NotFound("Account does not exist!");
 		}
 		if (!user.authenticate(req.body.password)) {
-			throw Error.Unauthorized("Password is incorrect!");
+			throw createHttpError.Unauthorized("Password is incorrect!");
 		}
 		const accessToken = jwt.sign({ auth: user._id }, process.env.SECRET_KEY, { expiresIn: "5m" });
 		console.log(user);
@@ -41,6 +48,14 @@ export const signin = async (req, res) => {
 			status: error.status,
 			message: error.message,
 		});
+	}
+};
+
+export const activateAccount = async (req, res) => {
+	try {
+		const accessToken = req.params.token;
+	} catch (error) {
+		// handle errors
 	}
 };
 
