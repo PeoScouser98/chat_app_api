@@ -3,8 +3,8 @@ import { Server } from "socket.io";
 const connectSocketIO = (server) => {
 	const io = new Server(server, {
 		cors: {
-			origin: "http://localhost:3004",
-			methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+			origin: "http://localhost:3000",
+			methods: ["GET", "POST", "PATCH", "PUT"],
 		},
 	});
 
