@@ -4,9 +4,8 @@ import { clientURL } from "../config/env.config";
 const connectSocketIO = (server) => {
 	const io = new Server(server, {
 		cors: {
-			origin: ["*", "https://chat-app-coral-ten.vercel.app", "http://localhost:4173"],
+			origin: "*",
 			methods: ["GET", "POST", "PATCH", "PUT"],
-			allowedHeaders: ["token"],
 		},
 	});
 

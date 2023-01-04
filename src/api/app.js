@@ -12,14 +12,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(
-	cors({
-		allowedHeaders: ["token"],
-		origin: ["*", "https://chat-app-coral-ten.vercel.app", "http://localhost:4173"],
-		methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-		optionsSuccessStatus: 200,
-	}),
-);
+app.use(cors({ origin: "*" }));
 app.use(function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
