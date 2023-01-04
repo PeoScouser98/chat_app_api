@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(
 	cors({
 		allowedHeaders: ["token"],
-		origin: ["*", "https://chat-app-coral-ten.vercel.app"],
+		origin: ["*", "https://chat-app-coral-ten.vercel.app", "http://localhost:4173"],
 		methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 		optionsSuccessStatus: 200,
 	}),
