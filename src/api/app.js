@@ -6,16 +6,17 @@ import __Chat from "./routes/chat.route";
 import __User from "./routes/user.route";
 import { activateAccount } from "./controllers/user.controller";
 import path from "path";
-import allowCors, { handler } from "../config/cors.config";
+import allowCors from "../config/cors.config";
 
 const app = express();
+
 app.use(express.json());
 
 app.use(
 	cors({
 		allowedHeaders: ["token"],
 		origin: "*",
-		methods: ["GET", "POST", "PATCH", "PUT"],
+		methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 		optionsSuccessStatus: 200,
 	}),
 );
@@ -25,7 +26,11 @@ app.use(
 		threshold: 10 * 1000,
 	}),
 );
-app.use(allowCors(handler));
+app.use(
+	allowCors((req, res) => {
+		res.end({ message: "Allow CORS!" });
+	}),
+);
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
 app.use("/api", __User);
