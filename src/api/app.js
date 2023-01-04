@@ -16,6 +16,7 @@ app.use(
 		allowedHeaders: ["token"],
 		origin: "*",
 		methods: ["GET", "POST", "PATCH", "PUT"],
+		optionsSuccessStatus: 200,
 	}),
 );
 app.use(
