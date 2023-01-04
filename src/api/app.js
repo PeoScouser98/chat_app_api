@@ -1,12 +1,11 @@
-import express from "express";
-import cors from "cors";
-import morgan from "morgan";
 import compression from "compression";
+import cors from "cors";
+import express from "express";
+import morgan from "morgan";
+import path from "path";
+import { activateAccount } from "./controllers/user.controller";
 import __Chat from "./routes/chat.route";
 import __User from "./routes/user.route";
-import { activateAccount } from "./controllers/user.controller";
-import path from "path";
-import allowCors from "../config/cors.config";
 
 const app = express();
 
