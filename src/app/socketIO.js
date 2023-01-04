@@ -4,7 +4,7 @@ import { clientURL } from "../config/env.config";
 const connectSocketIO = (server) => {
 	const io = new Server(server, {
 		cors: {
-			origin: clientURL,
+			origins: ["*", clientURL],
 			methods: ["GET", "POST", "PATCH", "PUT"],
 		},
 	});

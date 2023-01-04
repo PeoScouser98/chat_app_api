@@ -6,6 +6,7 @@ import __Chat from "./routes/chat.route";
 import __User from "./routes/user.route";
 import { activateAccount } from "./controllers/user.controller";
 import path from "path";
+import allowCors, { handler } from "../config/cors.config";
 
 const app = express();
 app.use(express.json());
@@ -20,7 +21,7 @@ app.use(
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
 app.use("/api", __User);
-
+app.use(allowCors(handler));
 app.get("/", (req, res) => {
 	return res.status(200).json({
 		status: 200,
