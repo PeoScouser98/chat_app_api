@@ -1,9 +1,10 @@
 import { Server } from "socket.io";
+import { clientURL } from "../config/env.config";
 
 const connectSocketIO = (server) => {
 	const io = new Server(server, {
 		cors: {
-			origin: "http://localhost:3000",
+			origin: clientURL,
 			methods: ["GET", "POST", "PATCH", "PUT"],
 		},
 	});
