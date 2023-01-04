@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(
 	cors({
 		allowedHeaders: ["token"],
-		origin: "*",
+		origin: ["*"],
 		methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 		optionsSuccessStatus: 200,
 	}),
@@ -25,7 +25,7 @@ app.use(
 		threshold: 10 * 1000,
 	}),
 );
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
 	res.setHeader("Access-Control-Allow-Credentials", true);
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	// another common pattern
@@ -35,8 +35,11 @@ app.use((req, res, next) => {
 		"Access-Control-Allow-Headers",
 		"X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
 	);
-
-	next();
+	if (req.method === "OPTIONS") {
+		res.send({ status: 200, message: "ok" });
+	} else {
+		next();
+	}
 });
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
