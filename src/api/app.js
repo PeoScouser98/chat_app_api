@@ -11,7 +11,14 @@ import allowCors, { handler } from "../config/cors.config";
 const app = express();
 app.use(express.json());
 
-app.use(cors());
+app.use(
+	cors({
+		allowedHeaders: ["token"],
+		origin: "*",
+		methods: ["GET", "POST", "PATCH", "PUT"],
+		credentials: true,
+	}),
+);
 app.use(
 	compression({
 		level: 6,
