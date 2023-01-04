@@ -14,9 +14,14 @@
 	"routes": [
 		{
 			"src": "/(.*)",
+			"dest": "src/index.js"
+		}
+	],
 
+	"rewrites": [
+		{
+			"source": "/(.*)",
 			"dest": "src/index.js",
-
 			"headers": [
 				{ "key": "Access-Control-Allow-Credentials", "value": "true" },
 				{ "key": "Access-Control-Allow-Origin", "value": "*" },
