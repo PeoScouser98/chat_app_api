@@ -20,7 +20,7 @@
 
 	"rewrites": [
 		{
-			"source": "/(.*)",
+			"src": "/(.*)",
 			"dest": "src/index.js",
 			"headers": [
 				{ "key": "Access-Control-Allow-Credentials", "value": "true" },
