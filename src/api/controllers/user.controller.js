@@ -6,22 +6,22 @@ import transporter from "../../config/nodemailer.config";
 
 export const signup = async (req, res) => {
 	try {
-		const existAccount = await User.findOne({ account: req.body.account });
+		const existAccount = await User.findOne({ email: req.body.email });
 		if (existAccount) throw createHttpError.BadRequest("Account already exist!");
-		const isProductionEnv = process.env.NODE_ENV.toLowerCase().localeCompare("production");
+		const isProductionEnv = process.env.NODE_ENV.toLowerCase().localeCompare("production") >= 0;
 		const verifyAccountUrl = isProductionEnv ? process.env.VERIFY_ACCOUNT_URL : process.env.LOCAL_VERIFY_ACCOUNT_URL;
 		const token = jwt.sign(req.body, process.env.SECRET_KEY, { expiresIn: "5m" });
 		const info = await transporter.sendMail({
 			from: process.env.AUTH_EMAIL,
 			to: req.body.email,
 			subject: "Thank you for creating new account ...",
-			html: `<p>Click on the link below <a href='${verifyAccountUrl}?token=${token}'>link</a> to activate your account </p>`,
+			html: `<p>Click on the link below <a href='${verifyAccountUrl}/account/activate/${token}'>link</a> to activate your account </p>`,
 		});
-		return res.status(201).json(info);
+		return res.status(200).json({ info, status: 200 });
 		// handle logic ...
 	} catch (error) {
 		console.log(error.message);
-		return res.status(error.status || 400).json({
+		return res.json({
 			status: error.status,
 			message: error.message,
 		});
@@ -30,7 +30,9 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
 	try {
-		const user = await User.findOne({ account: req.body.account }).exec();
+		console.log(req.body);
+		const user = await User.findOne({ email: req.body.email }).exec();
+		console.log(user);
 		if (!user) {
 			throw createHttpError.NotFound("Account does not exist!");
 		}
@@ -38,13 +40,16 @@ export const signin = async (req, res) => {
 			throw createHttpError.Unauthorized("Password is incorrect!");
 		}
 		const accessToken = jwt.sign({ auth: user._id }, process.env.SECRET_KEY, { expiresIn: "5m" });
-		console.log(user);
+		console.log("signin data:>>>", {
+			accessToken: accessToken,
+			auth: user._id,
+		});
 		return res.status(200).json({
 			accessToken: accessToken,
 			auth: user._id,
 		});
 	} catch (error) {
-		return res.status(error.status || 400).json({
+		return res.json({
 			status: error.status,
 			message: error.message,
 		});
@@ -53,9 +58,15 @@ export const signin = async (req, res) => {
 
 export const activateAccount = async (req, res) => {
 	try {
-		const accessToken = req.params.token;
+		const token = req.params.token;
+		const registedData = jwt.verify(token, process.env.SECRET_KEY);
+
+		await new User(registedData).save();
 	} catch (error) {
-		// handle errors
+		return res.json({
+			status: error.status,
+			message: error.message,
+		});
 	}
 };
 

@@ -5,6 +5,7 @@ import compression from "compression";
 import __Chat from "./routes/chat.route";
 import __User from "./routes/user.route";
 import { activateAccount } from "./controllers/user.controller";
+import path from "path";
 
 const app = express();
 app.use(express.json());
@@ -27,7 +28,7 @@ app.get("/", (req, res) => {
 	});
 });
 app.get("/account/activate/:token", activateAccount, (req, res) => {
-	res.sendFile(path.resolve(__dirname, "activate.html"));
+	if (req.params.token) res.sendFile(path.resolve(path.join(__dirname, "/activate.html")));
 });
 
 export default app;

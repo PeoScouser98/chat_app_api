@@ -1,13 +1,14 @@
-import * as ChatServices from "../services/chat.service";
 import createHttpError from "http-errors";
+import Chat from "../models/chat.model";
 
 export const list = async (req, res) => {
 	try {
-		const chats = await ChatServices.getAllChats();
+		const chats = await Chat.find({ members: req.auth });
 		if (!chats) throw createHttpError.NotFound("Cannot find any chat");
+
 		return res.status(200).json(chats);
 	} catch (error) {
-		return res.status(error.status).json({
+		return res.json({
 			status: error.status,
 			message: error.message,
 		});
@@ -16,7 +17,7 @@ export const list = async (req, res) => {
 
 export const read = async (req, res) => {
 	try {
-		const chat = await ChatServices.getSingleChat(req.params.id);
+		const chat = await Chat.findOne({ _id: req.params.id }).exec();
 		if (!chat) throw createHttpError.NotFound("Cannot find this chat!");
 		return res.status(200).json(chat);
 	} catch (error) {
@@ -29,10 +30,10 @@ export const read = async (req, res) => {
 
 export const create = async (req, res) => {
 	try {
-		const newChat = await ChatServices.createNewChat(req.body);
+		const newChat = await new Chat(req.body).save();
 		return res.status(201).json(newChat);
 	} catch (error) {
-		return res.status(error.status || 400).json({
+		return res.json({
 			status: error.status || 400,
 			message: error.message,
 		});
@@ -40,14 +41,14 @@ export const create = async (req, res) => {
 };
 export const remove = async (req, res) => {
 	try {
-		const removedChat = await ChatServices.deleteChat(req.params.id);
+		const removedChat = await Chat.findOneAndDelete({ _id: req.params.id });
 		if (!removedChat) throw createHttpError.BadRequest("Cannot delete this chat");
 
 		return res.json({
 			message: "Chat has been removed!",
 		});
 	} catch (error) {
-		return res.status(error.status || 400).json({
+		return res.json({
 			status: error.status || 400,
 			message: error.message,
 		});
@@ -56,10 +57,15 @@ export const remove = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
 	try {
-		const messages = await ChatServices.sendMessage(req.params.id, req.body);
-		return res.status(201).json(messages);
+		console.log(req.body);
+		const newMessage = await await Chat.findOneAndUpdate(
+			{ _id: req.params.id },
+			{ $push: { messages: req.body } },
+			{ new: true, upsert: true },
+		).exec();
+		return res.status(201).json(newMessage);
 	} catch (error) {
-		return res.status(error.status || 400).json({
+		return res.json({
 			status: error.status || 400,
 			message: error.message,
 		});
@@ -68,7 +74,7 @@ export const sendMessage = async (req, res) => {
 
 export const findChat = async (req, res) => {
 	try {
-		const userChat = await ChatServices.findChat(req.params.user);
+		const userChat = await Chat.findOne({ members: req.params.user }).exec();
 		if (!userChat)
 			return res.status(200).json({
 				status: 404,

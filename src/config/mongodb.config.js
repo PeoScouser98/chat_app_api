@@ -3,12 +3,11 @@ import mongoose from "mongoose";
 const connectMongoDb = async () => {
 	try {
 		const isProductionEnv = process.env.NODE_ENV.toLowerCase().localeCompare("production") >= 0;
-		console.log(isProductionEnv);
+		console.log("Production mode:>>", isProductionEnv);
 		const databaseUri = isProductionEnv ? process.env.DB_URI : process.env.DB_LOCAL_URI;
-		console.log(databaseUri);
 		mongoose.set("strictQuery", false);
-		const data = await mongoose.connect(databaseUri, { serverSelectionTimeoutMS: 5000 });
-		if (data) console.log("Connected to database!");
+		await mongoose.connect(databaseUri, { serverSelectionTimeoutMS: 5000 });
+		console.log("Connected to database!");
 	} catch (error) {
 		console.log(error.message);
 	}

@@ -9,5 +9,4 @@ router.post("/signin", _User.signin);
 router.get("/user", authenticate, _User.getUser);
 router.post("/refresh-token", _User.refreshToken);
 router.post("/users/search", _User.findUser);
-
 export default router;
