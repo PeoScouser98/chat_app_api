@@ -1,5 +1,5 @@
 import http from "http";
-import app from "./api/app";
+import app from "./api";
 import connectSocketIO from "./app/socketIO";
 import "dotenv/config";
 import mongoose from "mongoose";
