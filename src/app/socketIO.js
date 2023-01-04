@@ -7,7 +7,6 @@ const connectSocketIO = (server) => {
 			origin: "*",
 			methods: ["GET", "POST", "PATCH", "PUT"],
 			allowedHeaders: ["token"],
-			credentials: true,
 		},
 	});
 

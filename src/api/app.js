@@ -16,7 +16,6 @@ app.use(
 		allowedHeaders: ["token"],
 		origin: "*",
 		methods: ["GET", "POST", "PATCH", "PUT"],
-		credentials: true,
 	}),
 );
 app.use(
@@ -25,10 +24,10 @@ app.use(
 		threshold: 10 * 1000,
 	}),
 );
+app.use(allowCors(handler));
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
 app.use("/api", __User);
-app.use(allowCors(handler));
 app.get("/", (req, res) => {
 	return res.status(200).json({
 		status: 200,
