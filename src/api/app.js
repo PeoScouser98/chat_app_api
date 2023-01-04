@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(
 	cors({
 		allowedHeaders: ["token"],
-		origin: ["*"],
+		origin: ["*", "https://chat-app-coral-ten.vercel.app"],
 		methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
 		optionsSuccessStatus: 200,
 	}),
@@ -26,6 +26,7 @@ app.use(
 		threshold: 10 * 1000,
 	}),
 );
+app.use(allowCors);
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
 app.use("/api", __User);
