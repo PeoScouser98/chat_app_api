@@ -4,8 +4,10 @@ import { clientURL } from "../config/env.config";
 const connectSocketIO = (server) => {
 	const io = new Server(server, {
 		cors: {
-			origins: ["*", clientURL],
+			origin: "*",
 			methods: ["GET", "POST", "PATCH", "PUT"],
+			allowedHeaders: ["token"],
+			credentials: true,
 		},
 	});
 
