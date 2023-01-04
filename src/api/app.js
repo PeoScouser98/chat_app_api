@@ -26,11 +26,7 @@ app.use(
 		threshold: 10 * 1000,
 	}),
 );
-app.use(
-	allowCors((req, res) => {
-		res.end({ message: "Allow CORS!" });
-	}),
-);
+app.use(allowCors);
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
 app.use("/api", __User);
