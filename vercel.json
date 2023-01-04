@@ -17,11 +17,9 @@
 			"dest": "src/index.js"
 		}
 	],
-
-	"rewrites": [
+	"headers": [
 		{
-			"source": "/(.*)",
-			"destination": "src/index.js",
+			"source": "/api/*",
 			"headers": [
 				{ "key": "Access-Control-Allow-Credentials", "value": "true" },
 				{ "key": "Access-Control-Allow-Origin", "value": "*" },
