@@ -14,8 +14,8 @@
 
 	"headers": [
 		{
-			"src": "/(.*)",
-			"dest": "src/index.js",
+			"source": "/(.*)",
+			"destination": "src/index.js",
 			"headers": [
 				{ "key": "Access-Control-Allow-Credentials", "value": "true" },
 				{ "key": "Access-Control-Allow-Origin", "value": "*" },
