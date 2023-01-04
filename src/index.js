@@ -1,10 +1,9 @@
-import http from "http";
-import app from "./api";
-import connectSocketIO from "./app/socketIO";
-import "dotenv/config";
-import mongoose from "mongoose";
-import connectMongoDb from "./config/mongodb.config";
 import "babel-polyfill";
+import "dotenv/config";
+import http from "http";
+import app from "./api/app";
+import connectSocketIO from "./app/socketIO";
+import connectMongoDb from "./config/mongodb.config";
 
 const PORT = process.env.PORT || 3004;
 const server = http.createServer(app);
