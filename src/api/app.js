@@ -26,7 +26,7 @@ app.use(
 		threshold: 10 * 1000,
 	}),
 );
-app.use(allowCors);
+app.use("/api", allowCors);
 app.use(morgan("tiny"));
 app.use("/api", __Chat);
 app.use("/api", __User);
