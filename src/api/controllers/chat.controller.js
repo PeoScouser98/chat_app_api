@@ -1,6 +1,5 @@
 import createHttpError from "http-errors";
 import Chat from "../models/chat.model";
-
 export const list = async (req, res) => {
 	try {
 		const chats = await Chat.find({ members: req.auth });
