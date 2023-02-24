@@ -7,7 +7,7 @@ router.get("/chats", authenticate, _Chat.list);
 router.get("/chats/:id", authenticate, _Chat.read);
 router.post("/chats", authenticate, _Chat.create);
 router.delete("/chats", authenticate, _Chat.remove);
-router.patch("/chats/:id/send-message", authenticate, _Chat.sendMessage);
+// router.patch("/chats/:id/send-message", authenticate, _Chat.sendMessage);
 router.get("/chats/:user/find-chat", authenticate, _Chat.findChat);
 
 export default router;
