@@ -19,7 +19,6 @@ const userSchema = mongoose.Schema(
 		},
 		avatar: {
 			type: String,
-			default: "https://placeimg.com/192/192/people",
 		},
 		friends: [
 			{
@@ -45,6 +44,7 @@ userSchema.methods.authenticate = function (password) {
 
 userSchema.pre("save", function () {
 	this.password = this.encryptPassword(this.password);
+	this.avatar = "https://ui-avatars.com/api/?name=" + this.username.chatAt(0);
 });
 
 export default mongoose.model("Users", userSchema);

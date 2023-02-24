@@ -1,4 +1,4 @@
-import User from "../models/user.model";
+import UserModel from "../models/user.model";
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
@@ -6,7 +6,7 @@ import transporter from "../../config/nodemailer.config";
 
 export const signup = async (req, res) => {
 	try {
-		const existAccount = await User.findOne({ email: req.body.email });
+		const existAccount = await UserModel.findOne({ email: req.body.email });
 		if (existAccount) throw createHttpError.BadRequest("Account already exist!");
 		const isProductionEnv = process.env.NODE_ENV.toLowerCase().localeCompare("production") >= 0;
 		const verifyAccountUrl = isProductionEnv ? process.env.VERIFY_ACCOUNT_URL : process.env.LOCAL_VERIFY_ACCOUNT_URL;
@@ -31,7 +31,7 @@ export const signup = async (req, res) => {
 export const signin = async (req, res) => {
 	try {
 		console.log(req.body);
-		const user = await User.findOne({ email: req.body.email }).exec();
+		const user = await UserModel.findOne({ email: req.body.email }).exec();
 		console.log(user);
 		if (!user) {
 			throw createHttpError.NotFound("Account does not exist!");
@@ -61,7 +61,7 @@ export const activateAccount = async (req, res) => {
 		const token = req.params.token;
 		const registedData = jwt.verify(token, process.env.SECRET_KEY);
 
-		await new User(registedData).save();
+		await new UserModel(registedData).save();
 	} catch (error) {
 		return res.json({
 			status: error.status,
@@ -84,7 +84,7 @@ export const refreshToken = async (req, res) => {
 
 export const getUser = async (req, res) => {
 	try {
-		const user = await User.findOne({ _id: req.auth }).select("-password");
+		const user = await UserModel.findOne({ _id: req.auth }).select("-password");
 		return res.status(200).json({ user, status: 200 });
 	} catch (error) {
 		return res.status(error.status || 404).json({
@@ -96,8 +96,7 @@ export const getUser = async (req, res) => {
 export const findUser = async (req, res) => {
 	try {
 		const pattern = new RegExp(`${req.body.keyword}`, "gi");
-		console.log(pattern);
-		const users = await User.find({ username: { $regex: pattern } }).limit(5);
+		const users = await UserModel.find({ $or: [{ username: { $regex: pattern } }, { email: { $regex: pattern } }] }).limit(10);
 		return res.status(200).json(users);
 	} catch (error) {
 		return res.status(error.status || 404).json({
