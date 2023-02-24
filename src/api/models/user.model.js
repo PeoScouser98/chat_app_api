@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
 import { genSaltSync, hashSync, compareSync } from "bcrypt";
 
-const userSchema = mongoose.Schema(
+const UserSchema = mongoose.Schema(
 	{
 		email: {
 			type: String,
 			require: true,
-			// minLength: 16,
 		},
 		password: {
 			type: String,
@@ -17,9 +16,8 @@ const userSchema = mongoose.Schema(
 			type: String,
 			require: true,
 		},
-		avatar: {
+		photoUrl: {
 			type: String,
-			default: "https://placeimg.com/192/192/people",
 		},
 		friends: [
 			{
@@ -27,7 +25,6 @@ const userSchema = mongoose.Schema(
 				ref: "Users",
 			},
 		],
-		peerId: String,
 	},
 
 	{
@@ -35,16 +32,6 @@ const userSchema = mongoose.Schema(
 	},
 );
 
-userSchema.methods.encryptPassword = function (password) {
-	return hashSync(password, genSaltSync(10));
-};
+const UserModel = mongoose.model("Users", UserSchema);
 
-userSchema.methods.authenticate = function (password) {
-	return compareSync(password, this.password);
-};
-
-userSchema.pre("save", function () {
-	this.password = this.encryptPassword(this.password);
-});
-
-export default mongoose.model("Users", userSchema);
+export default UserModel;

@@ -93,6 +93,17 @@ export const getUser = async (req, res) => {
 		});
 	}
 };
+
+export const signinOrSignup = async (req, res) => {
+	try {
+	} catch (error) {
+		return res.status(400).json({
+			message: "Failed to authenticate!",
+			status: 400,
+		});
+	}
+};
+
 export const findUser = async (req, res) => {
 	try {
 		const pattern = new RegExp(`${req.body.keyword}`, "gi");
