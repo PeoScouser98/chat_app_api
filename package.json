@@ -5,7 +5,7 @@
 	"scripts": {
 		"start": "node ./dist/bundle.js",
 		"dev": "SET NODE_ENV=development && nodemon ./src/index.js --exec babel-node -e js",
-		"build": "npx webpack --config webpack.config.js",
+		"build": "npm run cleanup && npx webpack --config webpack.config.js",
 		"cleanup": "rm -rf dist"
 	},
 	"keywords": [],
